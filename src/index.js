@@ -1,7 +1,11 @@
 const onClickAdd = () => {
     const inputText = document.getElementById("add-text").value;
     document.getElementById("add-text").value = "";
+    createIncompleteList(inputText);
+};
 
+// 未完了リストに追加する関数
+const createIncompleteList = (text) => {
     // divタグ生成
     const div = document.createElement("div");
     div.className = "list-row"; 
@@ -9,7 +13,7 @@ const onClickAdd = () => {
     // liタグ生成
     const li = document.createElement("li");
     li.className = "task";
-    li.innerText = inputText;
+    li.innerText = text;
 
     // 完了ボタン生成
     const completeButton = document.createElement("button");
@@ -35,12 +39,27 @@ const onClickAdd = () => {
        const backButton = document.createElement("button");
        backButton.innerText = "戻す";
 
+       // 戻すボタン実装
+       backButton.addEventListener("click", () => {
+
+        // 押された戻すボタンの親タグを削除
+        const deleteTarget = backButton.parentNode;
+        document.getElementById("complete-list").removeChild(deleteTarget);
+        
+        // テキスト取得
+        const text = deleteTarget.firstElementChild.innerText;
+        console.log(text);
+
+        createIncompleteList(text);
+        
+       })   
+
       //  divタグの子要素に各要素を指定
       addTarget.appendChild(li);
       addTarget.appendChild(backButton);
 
-     //  完了リストに追加
-     document.getElementById("complete-list").appendChild(addTarget); 
+      //  完了リストに追加
+      document.getElementById("complete-list").appendChild(addTarget); 
     })
      
     // 削除ボタン生成
@@ -50,7 +69,7 @@ const onClickAdd = () => {
     // 削除ボタン実装
     deleteButton.addEventListener("click", () => {
        deleteFromIncomlpteList(deleteButton.parentNode);
-    })
+    });
 
     // 未完了リストに表示するものをdiv以下に追加する
     div.appendChild(li);
@@ -59,12 +78,11 @@ const onClickAdd = () => {
 
     // 未完了リストに追加
     document.getElementById("incomplete-list").appendChild(div);
+}
 
     // 未完了リストから特定の要素を削除
     const deleteFromIncomlpteList = (target) => {
         document.getElementById("incomplete-list").removeChild(target);
     }
-
-};
 
 document.getElementById("add-button").addEventListener("click", () => onClickAdd());
